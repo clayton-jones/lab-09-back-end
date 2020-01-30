@@ -1,16 +1,16 @@
 'use strict';
 
 const superagent = require('superagent');
-const client = require('./Client');
+const client = require('./Client.js');
 
 const location = {};
 
 location.getLocationData = function (city) {
-  console.log('Inside getLocationData');
-  let SQL = 'SELECT search_query, formatted_query, latitude, longitude FROM cities WHERE search_query=$1;';
-  console.log('Inside getLocationData2');
+  let SQL = 'SELECT * FROM cities WHERE search_query=$1;';
+  let values = [city];
 
-  return client.query(SQL, [city])
+  console.log('Inside getLocationData');
+  return client.query(SQL, values)
     .then(data => {
       console.log('Inside then, inside client query');
       if (data.rowCount) {

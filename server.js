@@ -94,7 +94,6 @@ function movieHandler(request, response) {
 }
 
 function locationHandler(request, response) {
-  console.log('ALIVE');
   const city = request.query.city;
   location.getLocationData(city)
     .then(data => sendJson(data, response))
