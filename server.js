@@ -23,8 +23,17 @@ app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 app.get('/events', eventsHandler);
 app.get('/movies', movieHandler);
+app.get('/yelp', yelpHandler);
 
 // Constructors
+function Yelp(rest) {
+  this.name = rest.name;
+  this.image_url = rest.image_url;
+  this.price = rest.price;
+  this.rating = rest.rating;
+  this.url = rest.url;
+}
+
 
 function Movie (movie) {
   this.title = movie.title;
@@ -56,16 +65,30 @@ function Event (event) {
 }
 
 // Endpoint callback functions
+function yelpHandler(request, response){
+  try{
+    const city = request.query.search_query;
+    const yelpUrl = `https://api.yelp.com/v3/businesses/search?location=${city}`;
+    console.log(yelpUrl);
+    superagent.get(yelpUrl)
+      .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
+      .then (data =>{
+        response.send(data.body.businesses.map(rest =>{
+          return new Yelp(rest);
+        }));
+      });
+  }
+  catch(error){
+    errorHandler(error, request, response);
+  }
+}
 
 function movieHandler(request, response) {
   try {
-    console.log(request.query);
     const city = request.query.search_query;
     const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1&include_adult=false`;
-    console.log(url);
     superagent.get(url)
       .then (data => {
-        console.log(data.body);
         response.send(data.body.results.map(movie => {
           return new Movie(movie);
         }));
