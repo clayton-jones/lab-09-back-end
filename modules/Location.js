@@ -5,6 +5,7 @@ const client = require('./Client.js');
 
 const location = {};
 
+
 location.getLocationData = function (city) {
   let SQL = 'SELECT * FROM cities WHERE search_query=$1;';
   let values = [city];
@@ -17,8 +18,8 @@ location.getLocationData = function (city) {
         console.log(data.rows[0]);
         return data.rows[0];
       } else {
-        let url = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${city}&format=json&limit-1`;
         console.log('Inside getLocationData > superagent');
+        let url = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${city}&format=json&limit-1`;
         return superagent.get(url)
           .then(data => {
             return cacheLocation(city, data.body);
