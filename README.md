@@ -173,11 +173,11 @@ Number and name of feature: #2 Yelp
 
 Estimate of time needed to complete: 60 min
 
-Start time: 2:30 pm
+Start time: 7:30 pm
 
-Finish time: 5:30 pm
+Finish time: 8:45 pm
 
-Actual time needed to complete: 3 hrs
+Actual time needed to complete: 1:15 min
 
 ---
 
