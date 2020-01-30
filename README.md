@@ -1,11 +1,11 @@
 # City Explorer
-## lab-08-backend
+## lab-09-backend
 
-**Author**: Clayton, (Lab 6 & 8) Tenaw, (Lab 7) Thomas S, 
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Author**: Clayton, (Lab 6 & 8) Tenaw, (Lab 7) Thomas S, Cas & Eyob (Lab 9)
+**Version**: 1.3.0 
 
 ## Delpoyed site
-https://city-explorers.herokuapp.com/
+
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
@@ -154,3 +154,39 @@ Finish time: 5:30 pm
 
 Actual time needed to complete: 3 hrs
 
+-------------------------------------
+#### Lab 9
+
+Number and name of feature: #1 Movies
+
+Estimate of time needed to complete: 60 min
+
+Start time: 6:15 pm
+
+Finish time: 7:00 pm
+
+Actual time needed to complete: 45 min
+
+---
+
+Number and name of feature: #2 Yelp
+
+Estimate of time needed to complete: 60 min
+
+Start time: 2:30 pm
+
+Finish time: 5:30 pm
+
+Actual time needed to complete: 3 hrs
+
+---
+
+Number and name of feature: #3 Refactor
+
+Estimate of time needed to complete: 60 min
+
+Start time: 2:30 pm
+
+Finish time: 5:30 pm
+
+Actual time needed to complete: 3 hrs

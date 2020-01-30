@@ -22,8 +22,19 @@ app.use(cors());
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 app.get('/events', eventsHandler);
+app.get('/movies', movieHandler);
 
 // Constructors
+
+function Movie (movie) {
+  this.title = movie.title;
+  this.overview = movie.overview;
+  this.average_votes = movie.vote_average;
+  this.total_votes = movie.vote_count;
+  this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+  this.popularity = movie.popularity;
+  this.released_on = movie.release_date;
+}
 
 function Location (city, geoData) {
   this.search_query = city;
@@ -45,6 +56,25 @@ function Event (event) {
 }
 
 // Endpoint callback functions
+
+function movieHandler(request, response) {
+  try {
+    console.log(request.query);
+    const city = request.query.search_query;
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1&include_adult=false`;
+    console.log(url);
+    superagent.get(url)
+      .then (data => {
+        console.log(data.body);
+        response.send(data.body.results.map(movie => {
+          return new Movie(movie);
+        }));
+      });
+  }
+  catch(error) {
+    errorHandler(error, request, response);
+  }
+}
 
 function locationHandler(request, response) {
   try {
