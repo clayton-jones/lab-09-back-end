@@ -1,7 +1,7 @@
 # City Explorer
 ## lab-09-backend
 
-**Author**: Clayton, (Lab 6 & 8) Tenaw, (Lab 7) Thomas S, Cas & Eyob (Lab 9)
+**Author**: Clayton, (Lab 6 & 8) Tenaw, (Lab 7) Thomas S, Cas & Eyob & Jordan (Lab 9)
 **Version**: 1.3.0 
 
 ## Delpoyed site
@@ -23,8 +23,12 @@ JavaScript, Node.JS
 
 ## Change Log
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
+-->
+01/20/2020 --- 1.0.0 --- Allows the user to access location and weather data for one location, provided in a JSON file
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
+01/23/2020 --- 1.1.0 --- Allows the user to access location, weather, and event data for any valid location utilizing LocationIQ, Darksky, and Eventful APIs
+
+01/30/2020 --- 1.2.0 --- Allows the user to access location, weather, event, yelp, and movie data for any valid location utilizing LocationIQ, Darksky, and Eventful APIs
 
 
 ## Credits and Collaborations
@@ -183,10 +187,10 @@ Actual time needed to complete: 1:15 min
 
 Number and name of feature: #3 Refactor
 
-Estimate of time needed to complete: 60 min
+Estimate of time needed to complete: 90 min
 
-Start time: 2:30 pm
+Start time: 6:00 pm
 
-Finish time: 5:30 pm
+Finish time: 7:30 pm
 
-Actual time needed to complete: 3 hrs
+Actual time needed to complete: 2 hrs
