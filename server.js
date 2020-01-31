@@ -20,7 +20,7 @@ app.use(cors());
 const location = require('./modules/Location.js');
 const weather = require('./modules/Weather.js');
 const events = require('./modules/Events.js');
-
+const movies = require('./modules/Movies.js');
 
 // Endpoint calls
 //route syntax = app.<operation>('<route>', callback);
@@ -38,17 +38,6 @@ function Yelp(rest) {
   this.rating = rest.rating;
   this.url = rest.url;
 }
-
-function Movie (movie) {
-  this.title = movie.title;
-  this.overview = movie.overview;
-  this.average_votes = movie.vote_average;
-  this.total_votes = movie.vote_count;
-  this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-  this.popularity = movie.popularity;
-  this.released_on = movie.release_date;
-}
-
 
 // Endpoint callback functions
 function yelpHandler(request, response){
@@ -70,19 +59,10 @@ function yelpHandler(request, response){
 }
 
 function movieHandler(request, response) {
-  try {
-    const city = request.query.search_query;
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1&include_adult=false`;
-    superagent.get(url)
-      .then (data => {
-        response.send(data.body.results.map(movie => {
-          return new Movie(movie);
-        }));
-      });
-  }
-  catch(error) {
-    errorHandler(error, request, response);
-  }
+  const city = request.query.search_query;
+  movies(city)
+    .then (movieData => sendJson(movieData, response))
+    .catch(error => errorHandler(error, request, response));
 }
 
 function locationHandler(request, response) {
