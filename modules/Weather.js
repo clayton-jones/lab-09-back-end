@@ -1,11 +1,12 @@
 'use strict';
 
+
 const superagent = require('superagent');
 
 module.exports = getWeather;
 
 function getWeather (lat, lon) {
-  console.log('Inside getWeather');
+  // console.log('Inside getWeather');
   const url = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${lat},${lon}`;
   return superagent.get(url)
     .then(data => {

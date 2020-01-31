@@ -38,7 +38,6 @@ function Yelp(rest) {
   this.url = rest.url;
 }
 
-
 function Movie (movie) {
   this.title = movie.title;
   this.overview = movie.overview;
@@ -48,8 +47,6 @@ function Movie (movie) {
   this.popularity = movie.popularity;
   this.released_on = movie.release_date;
 }
-
-
 
 function Event (event) {
   this.link = event.url;
@@ -63,7 +60,7 @@ function yelpHandler(request, response){
   try{
     const city = request.query.search_query;
     const yelpUrl = `https://api.yelp.com/v3/businesses/search?location=${city}`;
-    console.log(yelpUrl);
+    // console.log(yelpUrl);
     superagent.get(yelpUrl)
       .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
       .then (data =>{
@@ -94,14 +91,18 @@ function movieHandler(request, response) {
 }
 
 function locationHandler(request, response) {
+  // console.log('locationHandler request.query.city:', request.query.city);
   const city = request.query.city;
   location.getLocationData(city)
-    .then(data => sendJson(data, response))
+    .then(data => {
+      // console.log('server.js locationHandler data:', data);
+      sendJson(data, response);
+
+    })
     .catch(error => errorHandler(error, request, response));
 }
 
 function weatherHandler(request, response) {
-  console.log('Inside weatherHandler');
   const lat = request.query.latitude;
   const lon = request.query.longitude;
   weather(lat, lon)
@@ -111,9 +112,9 @@ function weatherHandler(request, response) {
 
 function eventsHandler(request, response) {
   try {
+    // console.log('request.query:', request.query);
     const lat = request.query.latitude;
     const lon = request.query.longitude;
-    console.log('lat & lon', lat, lon);
     const url = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&location=${lat},${lon}&within=10&page_size=20&date=Future`;
     superagent.get(url)
       .then(data => {
@@ -135,7 +136,7 @@ function sendJson (data, response) {
 }
 
 function errorHandler (error, request, response) {
-  console.log('inside errorHandler');
+  // console.log('inside errorHandler');
   response.status(500).send(error);
 }
 
