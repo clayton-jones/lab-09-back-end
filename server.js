@@ -8,13 +8,17 @@ const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
 
-const pg = require('pg');
-const client = new pg.Client(process.env.DATABASE_URL);
+// const pg = require('pg');
+// const client = new pg.Client(process.env.DATABASE_URL);
 
 //Application Setup
 const PORT = process.env.PORT;
 const app = express();
 app.use(cors());
+
+// Module Dependencies
+const location = require('./modules/Location.js');
+const weather = require('./modules/Weather.js');
 
 
 // Endpoint calls
@@ -34,7 +38,6 @@ function Yelp(rest) {
   this.url = rest.url;
 }
 
-
 function Movie (movie) {
   this.title = movie.title;
   this.overview = movie.overview;
@@ -43,18 +46,6 @@ function Movie (movie) {
   this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
   this.popularity = movie.popularity;
   this.released_on = movie.release_date;
-}
-
-function Location (city, geoData) {
-  this.search_query = city;
-  this.formatted_query = geoData.display_name;
-  this.latitude = geoData.lat;
-  this.longitude = geoData.lon;
-}
-
-function Weather (time, forecast) {
-  this.time = time;
-  this.forecast = forecast;
 }
 
 function Event (event) {
@@ -69,7 +60,7 @@ function yelpHandler(request, response){
   try{
     const city = request.query.search_query;
     const yelpUrl = `https://api.yelp.com/v3/businesses/search?location=${city}`;
-    console.log(yelpUrl);
+    // console.log(yelpUrl);
     superagent.get(yelpUrl)
       .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
       .then (data =>{
@@ -100,65 +91,30 @@ function movieHandler(request, response) {
 }
 
 function locationHandler(request, response) {
-  try {
-    const city = request.query.city;
-    let SQL = 'SELECT search_query, formatted_query, latitude, longitude FROM cities WHERE search_query=$1;';
+  // console.log('locationHandler request.query.city:', request.query.city);
+  const city = request.query.city;
+  location.getLocationData(city)
+    .then(data => {
+      // console.log('server.js locationHandler data:', data);
+      sendJson(data, response);
 
-    client.query(SQL, [city])
-      .then(data => {
-        if (data.rowCount) {
-          response.send(data.rows[0]);
-        } else {
-          let url = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${city}&format=json&limit-1`;
-
-          superagent.get(url)
-            .then(data => {
-              const geoData = data.body[0];
-              const locationData = new Location(city, geoData);
-              let {search_query, formatted_query, latitude, longitude} = locationData;
-              let SQLarray = [search_query, formatted_query, latitude, longitude];
-              let SQL = 'INSERT INTO cities (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING *;';
-              client.query(SQL, SQLarray);
-              response.send(locationData);
-            });
-        }
-      });
-  }
-  catch(error) {
-    errorHandler(error, request, response);
-  }
+    })
+    .catch(error => errorHandler(error, request, response));
 }
 
-// function cacheLocation (city, data) {
-
-// }
-
 function weatherHandler(request, response) {
-  try {
-    const lat = request.query.latitude;
-    const lon = request.query.longitude;
-    const url = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${lat},${lon}`;
-    superagent.get(url)
-      .then(data => {
-        let weatherArr = data.body.daily.data.map(obj => {
-          // Adreinne helped solve the time display issue
-          let time = new Date(obj.time * 1000).toString().slice(0, 15);
-          return new Weather(time, obj.summary);
-
-        });
-        response.send(weatherArr);
-      });
-  }
-  catch (error) {
-    errorHandler(error, request, response);
-  }
+  const lat = request.query.latitude;
+  const lon = request.query.longitude;
+  weather(lat, lon)
+    .then(summaries => sendJson(summaries, response))
+    .catch(error => errorHandler(error, request, response));
 }
 
 function eventsHandler(request, response) {
   try {
+    // console.log('request.query:', request.query);
     const lat = request.query.latitude;
     const lon = request.query.longitude;
-    console.log('lat & lon', lat, lon);
     const url = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&location=${lat},${lon}&within=10&page_size=20&date=Future`;
     superagent.get(url)
       .then(data => {
@@ -174,20 +130,18 @@ function eventsHandler(request, response) {
   }
 }
 
-// Error Handler function
+// Helper functions
+function sendJson (data, response) {
+  response.status(200).send(data);
+}
 
 function errorHandler (error, request, response) {
-  console.log('inside errorHandler');
+  // console.log('inside errorHandler');
   response.status(500).send(error);
 }
 
-client.connect()
-  .then(() => {
-    app.listen(PORT, () => console.log(`Server up on port ${PORT}`));
-  })
-  .catch(err => {
-    console.log('pg connect error ', err);
-  });
+app.listen(PORT, () => console.log(`Server up on port ${PORT}`));
+
 
 
 
