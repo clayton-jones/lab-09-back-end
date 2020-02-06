@@ -1,10 +1,20 @@
 'use strict';
 
-const superagent = require('superagent');
 
-module.exports = getMovies;
+const superagent = require('superagent');
+const sendJson = require('./SendJSON');
+const errorHandler = require('./ErrorHandler');
+
+module.exports = movieHandler;
 
 // movie handler function
+function movieHandler(request, response) {
+  const city = request.query.search_query;
+  getMovies(city)
+    .then (movieData => sendJson(movieData, response))
+    .catch(error => errorHandler(error, request, response));
+}
+
 
 function getMovies (city) {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1&include_adult=false`;

@@ -1,12 +1,21 @@
 'use strict';
 
-
 const superagent = require('superagent');
 const client = require('./Client.js');
-const location = {};
+const sendJson = require('./SendJSON');
+const errorHandler = require('./ErrorHandler');
 
+function locationHandler(request, response) {
+  const city = request.query.city;
+  getLocationData(city)
+    .then(data => {
+      sendJson(data, response);
 
-location.getLocationData = function (city) {
+    })
+    .catch(error => errorHandler(error, request, response));
+}
+
+function getLocationData (city) {
   let SQL = 'SELECT * FROM cities WHERE search_query=$1;';
   let values = [city];
 
@@ -22,7 +31,7 @@ location.getLocationData = function (city) {
           });
       }
     });
-};
+}
 
 function cacheLocation (city, data) {
   const locationData = new Location(city, data[0]);
@@ -42,4 +51,4 @@ function Location (city, data) {
 
 client.connect();
 
-module.exports = location;
+module.exports = locationHandler;

@@ -1,8 +1,20 @@
 'use strict';
 
-const superagent = require('superagent');
 
-module.exports = getEvents;
+const superagent = require('superagent');
+const sendJson = require('./SendJSON');
+const errorHandler = require('./ErrorHandler');
+
+module.exports = eventsHandler;
+
+function eventsHandler(request, response) {
+  const lat = request.query.latitude;
+  const lon = request.query.longitude;
+  getEvents(lat, lon)
+    .then(events => sendJson(events, response))
+    .catch(error => errorHandler(error, request, response));
+}
+
 
 function getEvents (lat, lon) {
   const url = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&location=${lat},${lon}&within=10&page_size=20&date=Future`;
