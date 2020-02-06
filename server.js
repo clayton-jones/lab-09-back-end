@@ -17,7 +17,7 @@ const location = require('./modules/Location.js');
 const weather = require('./modules/Weather.js');
 const events = require('./modules/Events.js');
 const movies = require('./modules/Movies.js');
-const yelp = require('./modules/Yelp.js');
+const yelpHandler = require('./modules/Yelp.js');
 
 // Endpoint calls
 //route syntax = app.<operation>('<route>', callback);
@@ -28,12 +28,12 @@ app.get('/movies', movieHandler);
 app.get('/yelp', yelpHandler);
 
 // Endpoint callback functions
-function yelpHandler(request, response){
-  const city = request.query.search_query;
-  yelp(city)
-    .then (yelps => sendJson(yelps, response))
-    .catch(error => errorHandler(error, request, response));
-}
+// function yelpHandler(request, response){
+//   const city = request.query.search_query;
+//   yelp(city)
+//     .then (yelps => sendJson(yelps, response))
+//     .catch(error => errorHandler(error, request, response));
+// }
 
 function movieHandler(request, response) {
   const city = request.query.search_query;

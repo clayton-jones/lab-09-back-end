@@ -1,8 +1,19 @@
 'use strict';
 
-const superagent = require('superagent');
 
-module.exports = getYelp;
+const superagent = require('superagent');
+const sendJson = require('./SendJSON.js');
+const errorHandler = require('./ErrorHandler');
+
+module.exports = yelpHandler;
+
+
+function yelpHandler(request, response){
+  const city = request.query.search_query;
+  getYelp(city)
+    .then (yelps => sendJson(yelps, response))
+    .catch(error => errorHandler(error, request, response));
+}
 
 function getYelp (city) {
   const yelpUrl = `https://api.yelp.com/v3/businesses/search?location=${city}`;

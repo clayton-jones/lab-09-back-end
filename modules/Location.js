@@ -1,6 +1,5 @@
 'use strict';
 
-
 const superagent = require('superagent');
 const client = require('./Client.js');
 const location = {};
