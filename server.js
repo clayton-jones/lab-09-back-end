@@ -16,7 +16,7 @@ app.use(cors());
 const location = require('./modules/Location.js');
 const weather = require('./modules/Weather.js');
 const events = require('./modules/Events.js');
-const movies = require('./modules/Movies.js');
+const movieHandler = require('./modules/Movies.js');
 const yelpHandler = require('./modules/Yelp.js');
 
 // Endpoint calls
@@ -35,12 +35,12 @@ app.get('/yelp', yelpHandler);
 //     .catch(error => errorHandler(error, request, response));
 // }
 
-function movieHandler(request, response) {
-  const city = request.query.search_query;
-  movies(city)
-    .then (movieData => sendJson(movieData, response))
-    .catch(error => errorHandler(error, request, response));
-}
+// function movieHandler(request, response) {
+//   const city = request.query.search_query;
+//   movies(city)
+//     .then (movieData => sendJson(movieData, response))
+//     .catch(error => errorHandler(error, request, response));
+// }
 
 function locationHandler(request, response) {
   const city = request.query.city;
