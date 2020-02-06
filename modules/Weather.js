@@ -2,8 +2,19 @@
 
 
 const superagent = require('superagent');
+const sendJson = require('./SendJSON');
+const errorHandler = require('./ErrorHandler');
 
-module.exports = getWeather;
+module.exports = weatherHandler;
+
+function weatherHandler(request, response) {
+  const lat = request.query.latitude;
+  const lon = request.query.longitude;
+  getWeather(lat, lon)
+    .then(summaries => sendJson(summaries, response))
+    .catch(error => errorHandler(error, request, response));
+}
+
 
 function getWeather (lat, lon) {
   // console.log('Inside getWeather');

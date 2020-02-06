@@ -14,7 +14,7 @@ app.use(cors());
 
 // Module Dependencies
 const locationHandler = require('./modules/Location.js');
-const weather = require('./modules/Weather.js');
+const weatherHandler = require('./modules/Weather.js');
 const events = require('./modules/Events.js');
 const movieHandler = require('./modules/Movies.js');
 const yelpHandler = require('./modules/Yelp.js');
@@ -52,13 +52,13 @@ app.get('/yelp', yelpHandler);
 //     .catch(error => errorHandler(error, request, response));
 // }
 
-function weatherHandler(request, response) {
-  const lat = request.query.latitude;
-  const lon = request.query.longitude;
-  weather(lat, lon)
-    .then(summaries => sendJson(summaries, response))
-    .catch(error => errorHandler(error, request, response));
-}
+// function weatherHandler(request, response) {
+//   const lat = request.query.latitude;
+//   const lon = request.query.longitude;
+//   weather(lat, lon)
+//     .then(summaries => sendJson(summaries, response))
+//     .catch(error => errorHandler(error, request, response));
+// }
 
 function eventsHandler(request, response) {
   const lat = request.query.latitude;
