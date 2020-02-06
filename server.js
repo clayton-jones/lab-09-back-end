@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 
 // Module Dependencies
-const location = require('./modules/Location.js');
+const locationHandler = require('./modules/Location.js');
 const weather = require('./modules/Weather.js');
 const events = require('./modules/Events.js');
 const movieHandler = require('./modules/Movies.js');
@@ -42,15 +42,15 @@ app.get('/yelp', yelpHandler);
 //     .catch(error => errorHandler(error, request, response));
 // }
 
-function locationHandler(request, response) {
-  const city = request.query.city;
-  location.getLocationData(city)
-    .then(data => {
-      sendJson(data, response);
+// function locationHandler(request, response) {
+//   const city = request.query.city;
+//   location.getLocationData(city)
+//     .then(data => {
+//       sendJson(data, response);
 
-    })
-    .catch(error => errorHandler(error, request, response));
-}
+//     })
+//     .catch(error => errorHandler(error, request, response));
+// }
 
 function weatherHandler(request, response) {
   const lat = request.query.latitude;
